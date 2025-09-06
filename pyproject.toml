@@ -1,0 +1,24 @@
+[project]
+name = "devops-capstone-project"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pre-commit>=4.3.0",
+    "ruff>=0.12.12",
+]
+
+[tool.nose]
+verbosity = 1
+
+[tool.coverage.report]
+show_missing = true
+
+[tool.flake8]
+per-file-ignores = [
+    "*/__init__.py: F401 E402"
+]
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = ["E1101"]
