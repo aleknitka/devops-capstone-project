@@ -3,8 +3,9 @@ Account Service
 
 This microservice handles the lifecycle of Accounts
 """
+
 # pylint: disable=unused-import
-from flask import jsonify, request, make_response, abort, url_for   # noqa; F401
+from flask import jsonify, request, make_response, abort, url_for  # noqa; F401
 from service.models import Account
 from service.common import status  # HTTP Status Codes
 from . import app  # Import Flask application
@@ -57,32 +58,77 @@ def create_accounts():
         jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
     )
 
+
 ######################################################################
 # LIST ALL ACCOUNTS
 ######################################################################
 
-# ... place you code here to LIST accounts ...
+
+@app.route("/accounts", methods=["GET"])
+def list_accounts():
+    """Lists all Accounts"""
+    app.logger.info("Request to list Accounts")
+    accounts = Account.all()
+    return jsonify(accounts), status.HTTP_200_OK
 
 
 ######################################################################
 # READ AN ACCOUNT
 ######################################################################
 
-# ... place you code here to READ an account ...
+
+@app.service("/accounts/<int:account_id>", methods=["GET"])
+def get_accounts(account_id):
+    """Reads an account by id"""
+    app.logger.info(f"Requesting account with id: {account_id}")
+    account = Account.find(account_id)
+    if not account:
+        abort(
+            status.HTTP_404_NOT_FOUND,
+            f"Account with id '{account_id}' was not found.",
+        )
+    return jsonify(account.serialize()), status.HTTP_200_OK
 
 
 ######################################################################
 # UPDATE AN EXISTING ACCOUNT
 ######################################################################
 
-# ... place you code here to UPDATE an account ...
+
+@app.service("/accounts/<int:account_id>", methods=["PUT"])
+def update_accounts(account_id):
+    """Update an Account"""
+    app.logger.info(f"Request to update account with id: {account_id}")
+    check_content_type("application/json")
+    account = Account.find(account_id)
+    if not account:
+        abort(
+            status.HTTP_404_NOT_FOUND,
+            f"Account with id '{account_id}' was not found.",
+        )
+    account.deserialize(request.get_json())
+    account.id = account_id
+    account.update()
+    return jsonify(account.serialize()), status.HTTP_200_OK
 
 
 ######################################################################
 # DELETE AN ACCOUNT
 ######################################################################
 
-# ... place you code here to DELETE an account ...
+
+@app.service("/accounts/<int:account_id>", methods=["DELETE"])
+def delete_accounts(account_id):
+    """Delete an Account"""
+    app.logger.info(f"Request to delete account with id: {account_id}")
+    account = Account.find(account_id)
+    if not account:
+        abort(
+            status.HTTP_404_NOT_FOUND,
+            f"Account with id '{account_id}' was not found.",
+        )
+    account.delete()
+    return "", status.HTTP_204_NO_CONTENT
 
 
 ######################################################################
