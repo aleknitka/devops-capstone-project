@@ -7,10 +7,31 @@ requires-python = ">=3.12"
 dependencies = [
     "pre-commit>=4.3.0",
     "ruff>=0.12.12",
+    "Werkzeug==2.1.2",
+    "SQLAlchemy==1.4.46",
+    "Flask==2.1.2",
+    "Flask-SQLAlchemy==2.5.1",
+    "psycopg2-binary==2.9.3",
+    "python-dotenv==0.20.0",
+    "gunicorn==20.1.0",
+    "honcho==1.1.0",
+    "pylint==2.14.0",
+    "flake8==4.0.1",
+    "black==22.3.0",
+    "nose==1.3.7",
+    "pinocchio==0.4.3",
+    "factory-boy==2.12.0",
+    "coverage==6.3.2",
+    "httpie==3.2.1"
 ]
 
 [tool.nose]
-verbosity = 1
+verbosity = 2
+with-spec = true
+spec-color = true
+with-coverage = true
+cover-erase = true
+cover-package = "service"
 
 [tool.coverage.report]
 show_missing = true
