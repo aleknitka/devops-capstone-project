@@ -95,7 +95,7 @@ def read_account(account_id):
 ######################################################################
 
 
-@app.service("/accounts/<int:account_id>", methods=["PUT"])
+@app.route("/accounts/<int:account_id>", methods=["PUT"])
 def update_accounts(account_id):
     """Update an Account"""
     app.logger.info(f"Request to update account with id: {account_id}")
@@ -117,7 +117,7 @@ def update_accounts(account_id):
 ######################################################################
 
 
-@app.service("/accounts/<int:account_id>", methods=["DELETE"])
+@app.route("/accounts/<int:account_id>", methods=["DELETE"])
 def delete_accounts(account_id):
     """Delete an Account"""
     app.logger.info(f"Request to delete account with id: {account_id}")
