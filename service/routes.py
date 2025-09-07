@@ -5,7 +5,7 @@ This microservice handles the lifecycle of Accounts
 """
 
 # pylint: disable=unused-import
-from flask import jsonify, request, make_response, abort, url_for  # noqa; F401
+from flask import jsonify, request, make_response, abort  # noqa; F401
 from service.models import Account
 from service.common import status  # HTTP Status Codes
 from . import app  # Import Flask application
@@ -69,7 +69,9 @@ def list_accounts():
     """Lists all Accounts"""
     app.logger.info("Request to list Accounts")
     accounts = Account.all()
-    return jsonify(accounts), status.HTTP_200_OK
+    account_list = [account.serialize() for account in accounts]
+    app.logger.info("Returning [%s] accounts", len(account_list))
+    return jsonify(account_list), status.HTTP_200_OK
 
 
 ######################################################################
@@ -77,8 +79,8 @@ def list_accounts():
 ######################################################################
 
 
-@app.service("/accounts/<int:account_id>", methods=["GET"])
-def get_accounts(account_id):
+@app.route("/accounts/<int:account_id>", methods=["GET"])
+def read_account(account_id):
     """Reads an account by id"""
     app.logger.info(f"Requesting account with id: {account_id}")
     account = Account.find(account_id)
@@ -95,7 +97,7 @@ def get_accounts(account_id):
 ######################################################################
 
 
-@app.service("/accounts/<int:account_id>", methods=["PUT"])
+@app.route("/accounts/<int:account_id>", methods=["PUT"])
 def update_accounts(account_id):
     """Update an Account"""
     app.logger.info(f"Request to update account with id: {account_id}")
@@ -117,7 +119,7 @@ def update_accounts(account_id):
 ######################################################################
 
 
-@app.service("/accounts/<int:account_id>", methods=["DELETE"])
+@app.route("/accounts/<int:account_id>", methods=["DELETE"])
 def delete_accounts(account_id):
     """Delete an Account"""
     app.logger.info(f"Request to delete account with id: {account_id}")
