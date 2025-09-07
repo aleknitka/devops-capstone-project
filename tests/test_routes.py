@@ -174,14 +174,13 @@ class TestAccountService(TestCase):
         account_1 = AccountFactory()
         response_1 = self.client.post(
             BASE_URL,
-            json=account_1.serialize(), 
+            json=account_1.serialize(),
             content_type="application/json"
         )
         self.assertEqual(
-            response_1.status_code, 
+            response_1.status_code,
             status.HTTP_201_CREATED)
         response_1_json = response_1.get_json()
-        
         # Update an account
         account_2 = AccountFactory()
         response_2 = self.client.put(
@@ -229,7 +228,7 @@ class TestAccountService(TestCase):
             f"{BASE_URL}/{new_account['id']}"
         )
         self.assertEqual(
-            resp_delete.status_code, 
+            resp_delete.status_code,
             status.HTTP_204_NO_CONTENT)
 
         resp = self.client.get(f"{BASE_URL}/{new_account['id']}")
